@@ -18,5 +18,6 @@ namespace SalesWebMVC.Data
         public DbSet<Seller> Seller { get; set; }
         public DbSet<SalesRecord> SallesRecord { get; set; }
 
+         
     }
 }
