@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SalesWebMVC.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,6 +30,11 @@ namespace SalesWebMVC.Models
         public double TotalSeles(DateTime initial, DateTime final)
         {
             return Sellers.Sum(x => x.TotalSales(initial, final));
+        }
+
+        public static implicit operator Departamento(DepartamentoService v)
+        {
+            throw new NotImplementedException();
         }
     }
 }
