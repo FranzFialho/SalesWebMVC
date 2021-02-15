@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -47,16 +48,16 @@ namespace SalesWebMVC.Controllers
 
         public IActionResult Delete(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = " Id Not Provided" });
             }
 
             var obj = _sellersService.FindById(id.Value);
 
-            if(obj == null)
+            if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = " Id Not found" });
             }
 
             return View(obj);
@@ -69,34 +70,34 @@ namespace SalesWebMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details (int? id)
+        public IActionResult Details(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = " Id Not provided" });
             }
 
             var obj = _sellersService.FindById(id.Value);
 
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = " Id Not found" });
             }
 
             return View(obj);
         }
 
-        public IActionResult Edit(int? id) 
+        public IActionResult Edit(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = " Id Not provided" });
             }
 
             var obj = _sellersService.FindById(id.Value);
-            if(obj == null)
+            if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = " Id Not found" });
             }
 
             List<Departamento> departamentos = _departamentoService.FindAll();
@@ -110,24 +111,33 @@ namespace SalesWebMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Seller seller)
         {
-            if(id != seller.Id)
+            if (id != seller.Id)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = " Id mismatch" });
             }
             try
             {
                 _sellersService.Update(seller);
                 return RedirectToAction(nameof(Index));
             }
-            catch(NotFoundExceptions)
+            catch (ApplicationException e)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new {message = e.Message});
             }
-            catch (DbConcurrencyException)
-            {
-                return BadRequest();
-            }
-
+           
         }
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel
+            {
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            };
+            return View(viewModel);
+        }
+
     }
+
 }
+
+
