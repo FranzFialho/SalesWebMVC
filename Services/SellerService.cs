@@ -47,7 +47,7 @@ namespace SalesWebMVC.Services
             }
             catch(DbUpdateException e)
             {
-                throw new IntegrityException("Não é possivel deletar um vendedor com vendas ativas");
+                throw new IntegrityException("Não é possivel deletar um vendedor com vendas ativas: "+ e);
             }
         }
 
