@@ -60,9 +60,12 @@ namespace SalesWebMVC.Migrations
 
                     b.Property<int>("DepartamentoId");
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .IsRequired();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(60);
 
                     b.HasKey("Id");
 
@@ -80,7 +83,7 @@ namespace SalesWebMVC.Migrations
 
             modelBuilder.Entity("SalesWebMVC.Models.Seller", b =>
                 {
-                    b.HasOne("SalesWebMVC.Models.Departamento", "Department")
+                    b.HasOne("SalesWebMVC.Models.Departamento", "Departamento")
                         .WithMany("Sellers")
                         .HasForeignKey("DepartamentoId")
                         .OnDelete(DeleteBehavior.Cascade);
